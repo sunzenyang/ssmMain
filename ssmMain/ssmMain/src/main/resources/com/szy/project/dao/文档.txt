@@ -1,0 +1,27 @@
+/**
+ * 说明
+ * 
+ * @author 孙振阳80818647@qq.com  on 2016-06-11
+ *
+ */
+ 
+ 	一：
+ 		由于我mybatis 配置文件是默认模式  ， 所以 mapper文件必须 DAO层的接口文件在同一级目录下。
+ 	
+ 	二： 
+ 	    mapper文件名字必须与 DAO层的接口类 的名字完相同，否则将无法加载到mapper文件
+ 	
+ 	三：   
+ 	    dao层接口里的方法必须要与mapper文件里面要操作的标签id完全相同
+ 		如：
+ 			接口方法： 
+ 						List<User> findAll();	  
+ 			
+ 			mapper文件：
+	 					<select id="findAll" resultType="com.szy.project.entity.User">
+							select * from user
+						</select>  
+						
+						
+						
+	四：					

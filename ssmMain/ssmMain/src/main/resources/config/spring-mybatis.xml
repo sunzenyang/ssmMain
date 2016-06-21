@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"  
+	xmlns:jee="http://www.springframework.org/schema/jee" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:util="http://www.springframework.org/schema/util" 
+    xmlns:task="http://www.springframework.org/schema/task" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd"
+	default-lazy-init="true">
+    
+    
+    <description>Spring 整合   mybatis</description>
+    <!-- 引用配置属性文件 -->
+	<context:property-placeholder ignore-unresolvable="true" location="classpath:config/jdbc.properties" />
+    <!-- spring与mybatis连接属性 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" >
+    <property name="driverClassName">
+      <value>${jdbc_driverClassName}</value>   
+    </property>
+    <property name="url">
+      <value>${jdbc_url}</value>	   
+    </property>
+    <property name="username">
+      <value>${jdbc_username}</value>		   
+    </property>
+    <property name="password">
+      <value>${jdbc_password}</value>  		   
+    </property>
+    <!-- 连接池最大使用连接数 -->
+    <property name="maxActive">
+      <value>20</value>
+    </property>
+    <!-- 初始化连接大小 -->
+    <property name="initialSize">
+      <value>1</value>
+    </property>
+    <!-- 获取连接最大等待时间 -->
+    <property name="maxWait">
+      <value>60000</value>
+    </property>
+    <!-- 连接池最大空闲 -->
+    <property name="maxIdle">
+      <value>20</value>
+    </property>
+    <!-- 连接池最小空闲 -->
+    <property name="minIdle">
+      <value>3</value>
+    </property>
+    <!-- 自动清除无用连接 -->
+    <property name="removeAbandoned">
+      <value>true</value>
+    </property>
+    <!-- 清除无用连接的等待时间 -->
+    <property name="removeAbandonedTimeout">
+      <value>180</value>
+    </property>
+    <!-- 连接属性 -->
+    <property name="connectionProperties">
+      <value>clientEncoding=UTF-8</value>
+    </property>
+  </bean>
+
+	 <!-- base-package 如果多个，用“,”分隔 -->
+	<!-- 自动扫描组件，这里要把controler下面的 controller去除，他们是在spring3-servlet.xml中配置的，如果不去除会影响事务管理的。   -->  
+	 <context:component-scan base-package="com.szy.project">  
+	      <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />   
+	 </context:component-scan>
+	
+	
+    <!-- Mybatis 接口式 扫描开发 -->
+    <!-- mybatis文件配置，扫描所有mapper文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+      <!-- 配置数据源 -->
+	  <property name="dataSource" ref="dataSource"/>
+	  <!-- 加载mybatis配置文件 -->
+	  <property name="configLocation" value="classpath:config/mybatis-config.xml"/>
+    </bean>
+	
+	
+	 <!-- spring与mybatis整合配置，扫描所有dao
+	 basePackage:指定sql映射文件/接口所在的包（自动扫描） -->
+	 <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	 	<property name="basePackage" value="com.szy.project.dao"/>
+	 	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	 </bean>
+	
+	
+	<!-- #####################################    事物管理  方式一： BRGIN     #################################################### -->	    
+	 <!-- 定义事务对数据源进行事务管理     -->  
+<!-- 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>				
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="add*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="del*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="edit*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
+			<tx:method name="query*" read-only="true"/>
+			<tx:method name="select*" read-only="true"/>
+			<tx:method name="get*" read-only="true"/>
+			<tx:method name="*" propagation="SUPPORTS" read-only="true" />
+		</tx:attributes>
+	</tx:advice> -->
+	<!--把事务控制在Service层-->   
+<!-- 	<aop:config>										   	
+		<aop:pointcut id="operation" expression="execution(* com.szy..services..*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="operation" />
+	</aop:config>   -->      
+<!-- #####################################    事物管理  方式一：  ENG   #################################################### -->	 	
+	   
+<!-- #####################################     事物管理  方式二：  BEGIN    #################################################### -->	    
+	 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		 <property name="dataSource" ref="dataSource" />
+	 </bean>
+	<!--  配置 Annotation 驱动，扫描@Transactional注解的类定义事务  -->
+	 <tx:annotation-driven transaction-manager="txManager" />
+ <!-- #####################################    事物管理  方式二：  ENG     ################################################# -->	     
+	                   
+
+
+</beans>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+     
+   <description>Spring MVC 配置文件</description>	   
+	   
+	<!-- 扫描所有的controller 但是不扫描service-->  
+	<context:component-scan base-package="com.szy.project">  
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />  
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />  
+	</context:component-scan> 
+	
+    <!-- 开启注解 -->
+    <mvc:annotation-driven />
+   
+   <!-- 避免IE在ajax请求时，返回json出现下载 -->
+   <bean id="jacksonMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">     
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+     
+	 <!-- 上线之后 设置方式 jsp页面解析器，当Controller返回XXX字符串时，
+	 				先通过拦截器，查找XXX.jsp文件-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<property name="prefix" value="/jsp/"></property>
+    	<property name="suffix" value=".jsp"></property>
+    </bean>     
+     
+    <!-- 上传文件拦截，设置最大上传文件大小   10M=10*1024*1024(B)=10485760 bytes -->  
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+		<property name="maxUploadSize" value="10485760" />  
+	</bean>    
+      
+	<!-- 配置js，css等静态文件直接映射到对应的文件夹，不被DispatcherServlet处理 -->
+    <mvc:resources mapping="/res/**" location="/res/" cache-period="31556926"/>
+	
+	  
+</beans>
