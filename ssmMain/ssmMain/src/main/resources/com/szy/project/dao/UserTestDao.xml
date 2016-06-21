@@ -20,6 +20,12 @@
 	 mybsits_config中配置的alias类别名,也可直接配置resultType为类路劲  
  -->
 		
+<!-- 	<delete id="delUser" parameterType="java.lang.Integer">
+		<if test="${id} !=null and ${id} > 5">
+				delete from t_user where user_id=#{id}
+		</if>
+	</delete> -->	
+		
 	<select id="getUserById" parameterType="java.lang.Integer" resultType="com.szy.project.entity.User">
 		select * from user where id=#{id}
 	</select>	
