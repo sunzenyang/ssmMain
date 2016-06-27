@@ -42,4 +42,8 @@
 		select * from user
 	</select>
 	
+	<select id="getTreeTest" resultType="com.szy.project.entity.TreeTest">
+		select * from treetest
+	</select>
+	
 </mapper>

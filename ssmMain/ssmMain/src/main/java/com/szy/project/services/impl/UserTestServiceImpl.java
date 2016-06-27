@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.szy.project.dao.UserTestDao;
+import com.szy.project.entity.TreeTest;
 import com.szy.project.entity.User;
 import com.szy.project.services.UserTestService;
 
@@ -58,6 +59,16 @@ public class UserTestServiceImpl implements UserTestService{
 		User user=userDao.getUserById(Integer.valueOf(userId));
 		System.out.println(user.getClass());
 		return user;
+	}
+	
+	/**
+	 * 测试树 数据接口
+	 * @return
+	 */
+	public List<TreeTest> getTreeTest() {
+		List<TreeTest> test=userDao.getTreeTest();
+	
+		return test;
 	}
 
 

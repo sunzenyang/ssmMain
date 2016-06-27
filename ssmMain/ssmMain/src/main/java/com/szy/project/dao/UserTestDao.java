@@ -2,6 +2,7 @@ package com.szy.project.dao;
 
 import java.util.List;
 
+import com.szy.project.entity.TreeTest;
 import com.szy.project.entity.User;
 
 
@@ -18,5 +19,9 @@ public interface UserTestDao {
 	void update(User u);
 
 	User getUserById(Integer userId);
+
+	List<TreeTest> getTreeTest();
+
+
 
 }

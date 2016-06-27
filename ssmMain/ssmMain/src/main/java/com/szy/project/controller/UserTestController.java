@@ -42,7 +42,7 @@ public class UserTestController {
 		
 		List<User> findAll = userService.findAll();
 		request.setAttribute("userList", findAll);
-		return "/allUser";
+		return "/test/allUser";
 	}
 	
 	/**
@@ -55,7 +55,7 @@ public class UserTestController {
 		
 		User user = userService.getUserById(userId);
 		request.setAttribute("user", user);
-		return "/allUser";
+		return "/test/allUser";
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class UserTestController {
 		
 		request.setAttribute("111", 1111);
 		
-		
+		//转发到欢迎页面
 		request.getRequestDispatcher("/").forward(request, response); 
 	}
 	

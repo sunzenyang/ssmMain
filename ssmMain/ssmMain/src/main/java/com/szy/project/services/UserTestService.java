@@ -2,6 +2,7 @@ package com.szy.project.services;
 
 import java.util.List;
 
+import com.szy.project.entity.TreeTest;
 import com.szy.project.entity.User;
 
 /**
@@ -15,6 +16,12 @@ public interface UserTestService {
 	public List<User> findAll();
 
 	public User getUserById(String userId);
+	
+	/**
+	 * 测试树 数据接口
+	 * @return
+	 */
+	public List<TreeTest> getTreeTest();
 
 
 
