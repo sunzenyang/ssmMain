@@ -73,7 +73,7 @@
   </bean>
 
 	 <!-- base-package 如果多个，用“,”分隔 -->
-	<!-- 自动扫描组件，这里要把controler下面的 controller去除，他们是在spring3-servlet.xml中配置的，如果不去除会影响事务管理的。   -->  
+	<!-- 自动扫描组件，这里要把controler下面的 controller去除，如果不去除会影响事务管理的。   -->  
 	 <context:component-scan base-package="com.szy.project">  
 	      <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />   
 	 </context:component-scan>
@@ -95,33 +95,7 @@
 	 	<property name="basePackage" value="com.szy.project.dao"/>
 	 	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	 </bean>
-	
-	
-	<!-- #####################################    事物管理  方式一： BRGIN     #################################################### -->	    
-	 <!-- 定义事务对数据源进行事务管理     -->  
-<!-- 	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>				
-	<tx:advice id="txAdvice" transaction-manager="txManager">
-		<tx:attributes>
-			<tx:method name="add*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
-			<tx:method name="save*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
-			<tx:method name="insert*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
-			<tx:method name="del*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
-			<tx:method name="update*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
-			<tx:method name="edit*" propagation="REQUIRED" read-only="false" rollback-for="java.lang.Exception" />
-			<tx:method name="query*" read-only="true"/>
-			<tx:method name="select*" read-only="true"/>
-			<tx:method name="get*" read-only="true"/>
-			<tx:method name="*" propagation="SUPPORTS" read-only="true" />
-		</tx:attributes>
-	</tx:advice> -->
-	<!--把事务控制在Service层-->   
-<!-- 	<aop:config>										   	
-		<aop:pointcut id="operation" expression="execution(* com.szy..services..*(..))" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="operation" />
-	</aop:config>   -->      
-<!-- #####################################    事物管理  方式一：  ENG   #################################################### -->	 	
+	 	
 	   
 <!-- #####################################     事物管理  方式二：  BEGIN    #################################################### -->	    
 	 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

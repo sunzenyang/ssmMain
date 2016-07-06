@@ -3,6 +3,8 @@ package com.szy.project.entity;
 public class User {
 	
 	private int id;
+	private String userName;
+	private String password;
 	private String name;
 	private int age;
 	private String sex;
@@ -10,6 +12,18 @@ public class User {
 	
 	
 	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public String getSex() {
 		return sex;
 	}

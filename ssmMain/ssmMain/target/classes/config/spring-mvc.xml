@@ -43,5 +43,21 @@
 	<!-- 配置js，css等静态文件直接映射到对应的文件夹，不被DispatcherServlet处理 -->
     <mvc:resources mapping="/res/**" location="/res/" cache-period="31556926"/>
 	
+
+	<!-- 自定义拦截器 -->
+	<mvc:interceptors>  
+	    <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->  
+	   <!--  <bean class="com.szy.project.interceptor.InterceptorCommons"/> -->  
+	    <mvc:interceptor>  
+	   		 <!-- 匹配的是url路径， 如果不配置或/**,将拦截所有的Controller -->  
+	        <mvc:mapping path="/**" />   
+	        <!--<mvc:mapping path="/user/**" /> --> 
+	        
+        	<!--不进行拦截的controller  -->
+        	<mvc:exclude-mapping path="/login/**"/> 
+	        <bean class="com.szy.project.interceptor.InterceptorCommons"/>  
+	    </mvc:interceptor>  
+	</mvc:interceptors>
+	
 	  
 </beans>
